@@ -20,12 +20,11 @@ st.caption("Interactive IPL ball-by-ball data analytics dashboard")
 # --------------------------------------------------
 # LOAD DATA
 # --------------------------------------------------
-DATA_PATH = "/content/ipl_deliveries.zip"
+DATA_PATH = "ipl_deliveries.zip"
 
 @st.cache_data
 def load_data(path):
     df = pd.read_csv(path, compression="zip")
-    return df
 
     required_columns = [
         "match_id", "date", "venue", "innings",
@@ -34,7 +33,10 @@ def load_data(path):
         "extras", "wickets"
     ]
 
-    missing = [col for col in required_columns if col not in df.columns]
+    missing = [
+        col for col in required_columns
+        if col not in df.columns
+    ]
 
     if missing:
         raise ValueError(f"Missing columns: {missing}")
@@ -43,17 +45,18 @@ def load_data(path):
         "innings", "over", "ball", "batter_runs",
         "total_runs", "extras", "wickets"
     ]:
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+        df[col] = pd.to_numeric(
+            df[col], errors="coerce"
+        ).fillna(0)
 
-    df["date"] = pd.to_datetime(df["date"], errors="coerce")
-    df["batter"] = df["batter"].fillna("Unknown")
-    df["bowler"] = df["bowler"].fillna("Unknown")
-    df["venue"] = df["venue"].fillna("Unknown")
-    df["batting_team"] = df["batting_team"].fillna("Unknown")
+    df["date"] = pd.to_datetime(
+        df["date"], errors="coerce"
+    )
+
+    for col in ["batter", "bowler", "venue", "batting_team"]:
+        df[col] = df[col].fillna("Unknown")
 
     return df
-
-
 if not os.path.exists(DATA_PATH):
     st.error(f"Dataset not found: {DATA_PATH}")
     st.info("Upload ipl_deliveries.csv to your Colab session.")
