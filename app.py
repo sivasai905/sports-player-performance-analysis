@@ -20,11 +20,11 @@ st.caption("Interactive IPL ball-by-ball data analytics dashboard")
 # --------------------------------------------------
 # LOAD DATA
 # --------------------------------------------------
-DATA_PATH = "/content/ipl_deliveries.csv"
+DATA_PATH = "/content/ipl_deliveries.zip"
 
 @st.cache_data
 def load_data(path):
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, compression="zip")
 
     required_columns = [
         "match_id", "date", "venue", "innings",
