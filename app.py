@@ -25,6 +25,7 @@ DATA_PATH = "/content/ipl_deliveries.zip"
 @st.cache_data
 def load_data(path):
     df = pd.read_csv(path, compression="zip")
+      return df
 
     required_columns = [
         "match_id", "date", "venue", "innings",
